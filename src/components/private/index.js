@@ -1,16 +1,23 @@
 import React from "react";
 import { ContainerDiv, HeaderTitleDiv } from "../../commonStyles";
+import styled from "styled-components";
 import axios from "axios";
-import { EMPLOYEES_API, SUCCESS_CODE } from "../../utils";
+import { EMPLOYEES_API, SUCCESS_CODE, logout, LOGIN_URL } from "../../utils";
 import { List, Map } from "immutable";
 import Loading from "./Loading";
 import MaterialTable from "material-table";
 import { TableContainerDiv } from "./styles";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Button } from "@material-ui/core";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import DeleteDialog from "../dialog/DeleteDialog";
 import CreateModifyDialog from "../dialog/CreateModifyDialog";
 import uuidv4 from "uuid/v4";
+
+const HeaderTitleDivModified = styled(HeaderTitleDiv)`
+    width: 100%;
+    display: flex;
+    align-items: center;
+`;
 
 class Private extends React.Component {
     constructor(props) {
@@ -25,6 +32,7 @@ class Private extends React.Component {
         this.closeDialog = this.closeDialog.bind(this);
         this.deleteUsers = this.deleteUsers.bind(this);
         this.addOrModifyUser = this.addOrModifyUser.bind(this);
+        this.logoutAction = this.logoutAction.bind(this);
     }
 
     getEmployees() {
@@ -118,6 +126,12 @@ class Private extends React.Component {
             .toJS();
     }
 
+    logoutAction() {
+        const { history } = this.props;
+        logout();
+        history.push(LOGIN_URL);
+    }
+
     renderEmployeeTable() {
         const users = this.state.users.toJS();
         return (
@@ -194,7 +208,25 @@ class Private extends React.Component {
                 justifyContent="center"
                 alignItems="center"
             >
-                <HeaderTitleDiv>PRIVATE PAGE</HeaderTitleDiv>
+                <HeaderTitleDivModified>
+                    <div style={{ width: "80%" }}>PRIVATE PAGE</div>
+                    <div style={{ width: "10%" }}>
+                        <Button
+                            style={{
+                                color: "red",
+                                backgroundColor: "white",
+                                border: "2px solid red",
+                                borderRadius: "5px",
+                                fontSize: "20pt"
+                            }}
+                            onClick={this.logoutAction}
+                            color="secondary"
+                            fullWidth={true}
+                        >
+                            LOGOUT
+                        </Button>
+                    </div>
+                </HeaderTitleDivModified>
                 {status !== SUCCESS_CODE ? (
                     <Loading />
                 ) : (
