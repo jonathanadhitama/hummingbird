@@ -8,16 +8,25 @@ import {
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import { Formik, Form } from "formik";
-import { renderTextField, GOOGLE_PLACES_URL, SUCCESS_CODE } from "../../utils";
+import { renderTextField, SUCCESS_CODE, MIDDLEWARE_URL } from "../../utils";
 import { withStyles } from "@material-ui/core/styles";
 import validationSchema from "./validationSchema";
 import axios from "axios";
+import ErrorNotification from "../error/ErrorNotification";
+import SearchResults from "./SearchResults";
 
 const SectionContainerDiv = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+
+const SearchResultContainer = styled.div`
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
 `;
 
 const styles = () => ({
@@ -34,37 +43,32 @@ const styles = () => ({
 
 const Home = ({ classes }) => {
     const [searchResults, setSearchResult] = useState(null);
-    const [status, setStatus] = useState(null);
+    const [status, setStatus] = useState(SUCCESS_CODE);
+    const [errorMessage, setErrorMessage] = useState("");
     return (
-        <ContainerDiv
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-        >
+        <ContainerDiv flexDirection="column" alignItems="center">
             <HeaderTitleDiv>HOME PAGE</HeaderTitleDiv>
             <SectionContainerDiv>
                 <Formik
                     onSubmit={({ search }, { setSubmitting }) => {
                         setSubmitting(true);
                         axios
-                            .create({
-                                headers: {
-                                    "Access-Control-Allow-Origin": "*"
-                                }
-                            })
-                            .get(GOOGLE_PLACES_URL, {
+                            .get(MIDDLEWARE_URL, {
                                 params: {
-                                    input: search,
-                                    key: process.env.REACT_APP_MAPS_API
-                                },
-                                crossdomain: true
+                                    input: search
+                                }
                             })
                             .then(({ data, status }) => {
-                                if (status === SUCCESS_CODE) {
-                                    setStatus(status);
-                                    setSearchResult(data);
-                                    setSubmitting(false);
-                                }
+                                setStatus(status);
+                                setSearchResult(data);
+                                setErrorMessage("");
+                                setSubmitting(false);
+                            })
+                            .catch(({ status, message }) => {
+                                setStatus(status);
+                                setSearchResult(null);
+                                setErrorMessage(message);
+                                setSubmitting(false);
                             });
                     }}
                     validationSchema={validationSchema}
@@ -93,6 +97,13 @@ const Home = ({ classes }) => {
                     )}
                 </Formik>
             </SectionContainerDiv>
+            <SearchResultContainer>
+                <SearchResults data={searchResults} />
+            </SearchResultContainer>
+            <ErrorNotification
+                error={status !== SUCCESS_CODE}
+                message={errorMessage}
+            />
         </ContainerDiv>
     );
 };

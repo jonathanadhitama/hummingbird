@@ -54,5 +54,4 @@ export const PRIVATE_URL = "/private";
 export const HOME_URL = "/home";
 export const EMPLOYEES_API = "https://jsonplaceholder.typicode.com/users";
 export const SUCCESS_CODE = 200;
-export const GOOGLE_PLACES_URL =
-    "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+export const MIDDLEWARE_URL = "http://localhost:8000/places";
