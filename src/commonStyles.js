@@ -21,3 +21,13 @@ export const HeaderTitleDiv = styled.div`
     text-align: center;
     padding-bottom: 50px;
 `;
+
+export const FieldContainerDiv = styled.div`
+    width: 100%;
+    padding-bottom: 20px;
+`;
+
+export const FormContainerDiv = styled.div`
+    width: 50%;
+    height: 40%;
+`;

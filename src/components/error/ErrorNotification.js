@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Snackbar, SnackbarContent, IconButton } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { Error as ErrorIcon, Close as CloseIcon } from "@material-ui/icons";
@@ -60,6 +61,11 @@ const ErrorNotification = ({ error, message, classes }) => {
             />
         </Snackbar>
     );
+};
+ErrorNotification.propTypes = {
+    error: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired,
+    classes: PropTypes.object.isRequired
 };
 
 export default withStyles(errorStyles)(ErrorNotification);

@@ -1,23 +1,15 @@
 import React, { useState } from "react";
-import { Formik, Form, Field } from "formik";
-import { TextField } from "formik-material-ui";
-import { ContainerDiv, HeaderTitleDiv } from "../../commonStyles";
+import { Formik, Form } from "formik";
+import {
+    ContainerDiv,
+    HeaderTitleDiv,
+    FieldContainerDiv,
+    FormContainerDiv
+} from "../../commonStyles";
 import LoginButton from "./LoginButton";
-import { login, PRIVATE_URL } from "../../utils";
+import { login, PRIVATE_URL, renderTextField } from "../../utils";
 import ErrorNotification from "../error/ErrorNotification";
-import { FormContainerDiv, FieldContainerDiv } from "./styles";
-
-const renderTextField = (name, required, type, label) => (
-    <Field
-        name={name}
-        label={label}
-        required={required}
-        type={type}
-        component={TextField}
-        variant="outlined"
-        fullWidth={true}
-    />
-);
+import validationSchema from "./validationSchema";
 
 const TEXT_FIELDS = [
     { name: "email", label: "EMAIL ADDRESS", required: true, type: "text" },
@@ -45,6 +37,7 @@ const Login = ({ history }) => {
                         history.push(PRIVATE_URL);
                     }
                 }}
+                validationSchema={validationSchema}
             >
                 {({ isSubmitting }) => {
                     return (
