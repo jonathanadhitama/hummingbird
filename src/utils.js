@@ -24,6 +24,10 @@ export const login = (loginEmail, password) => {
     }
 };
 
+export const logout = () => {
+    localStorage.removeItem(USER_TOKEN_KEY);
+};
+
 //URL Constants
 export const LOGIN_URL = "/login";
 export const PRIVATE_URL = "/private";
